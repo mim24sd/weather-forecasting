@@ -1,0 +1,12 @@
+{
+  "name": "weather-forecasting",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:mim24sd/weather-forecasting.git",
+  "author": "<mim24sd@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
