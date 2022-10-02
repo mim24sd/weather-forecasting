@@ -1,12 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     <title>Weather Forecasting</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="./assests/css/fontawesome.css" >
+    <link rel="stylesheet" href="./assests/css/index.css" >
   </head>
   <body>
-    <p>hi</p>
+    <header class="header">
+      <i class="fa fa-bolt fa-magnifying-glass"></i>
+      <input class="header-search" type="text" placeholder="Search.." >
+    </header>
+    <main class="main">
+      <section class="city-section">
+        <h1 class="city-name">Tehran</h1>
+        <time datetime="2020-02-14">Sunday, 20 Jul 2022</time>
+      </section>
+      <section class="main-section">
+        <img
+          alt="today's weather image"
+          src="./assests/images/sun.png"
+          class="main-image"
+        >
+        <h2 class="main-degree">82,4&#186;F</h2>
+        <p>Its a sunny day</p>
+        <p>Perfect for a shopping trip.</p>
+        <ul class="main-icons-container">
+          <li>
+            <figure class="main-icon-container">
+              <i class="fa fa-solid fa-wind main-icon"></i>
+              <figcaption class="main-icon-detail">3mph</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure class="main-icon-container">
+              <i class="fa fa-solid fa-droplet main-icon"></i>
+              <figcaption class="main-icon-detail">60%</figcaption>
+            </figure>
+          </li>
+        </ul>
+      </section>
+      <ul class="each-day-weather-list">
+        <li>
+          <figure class="each-day-weather-box">
+            <i class="fa fa-solid fa-cloud-bolt"></i>
+            <figcaption class="each-day-weather-text-box">
+              <p class="each-day-weather-paragraph">82,4&#186;/86&#186;F</p>
+              <p>Today</p>
+            </figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="each-day-weather-box">
+            <i class="fa fa-solid fa-cloud-bolt"></i>
+            <figcaption class="each-day-weather-text-box">
+              <p class="each-day-weather-paragraph">82,4&#186;/86&#186;F</p>
+              <p>Monday</p>
+            </figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="each-day-weather-box">
+            <i class="fa fa-solid fa-cloud-bolt"></i>
+            <figcaption class="each-day-weather-text-box">
+              <p class="each-day-weather-paragraph">82,4&#186;/86&#186;F</p>
+              <p>Thursday</p>
+            </figcaption>
+          </figure>
+        </li>
+      </ul>
+    </main>
   </body>
 </html>
