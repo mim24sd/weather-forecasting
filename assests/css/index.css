@@ -1,2 +1,103 @@
 @import "./reset.css";
 @import "./variables.css";
+
+body {
+  background-image: linear-gradient(
+      var(--darkColorHover),
+      var(--darkColorHover)
+    ),
+    url(../images/background.jpg);
+  background-size: cover;
+  min-height: 100vh;
+  color: var(--lightColor);
+  align-items: center;
+  font-family: var(--primaryFont);
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-xxl);
+}
+
+.header-search {
+  width: 70%;
+  background-color: unset;
+  border-bottom: 1px solid var(--lightColor);
+  border-top: unset;
+  border-inline: unset;
+  font-size: var(--size-md);
+  margin-inline: var(--space-md);
+}
+
+.main {
+  min-height: 90vh;
+  display: grid;
+  place-items: center;
+}
+
+.city-section {
+  text-align: center;
+}
+
+.city-name {
+  font-size: var(--size-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.main-section {
+  width: max-content;
+  display: grid;
+  place-items: center;
+  gap: var(--space-sm);
+}
+
+.main-image {
+  width: 100px;
+}
+
+.main-degree {
+  font-size: var(--size-xxxl);
+  padding: var(--space-lg) 0;
+}
+
+.main-icons-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-top: var(--space-lg);
+}
+
+.main-icon-container {
+  display: flex;
+}
+
+.main-icon {
+  padding-right: var(--space-md);
+}
+
+.main-icon-detail {
+  font-size: 12px;
+  align-self: center;
+}
+
+.each-day-weather-list {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.each-day-weather-box {
+  display: grid;
+  place-items: center;
+}
+
+.each-day-weather-text-box {
+  display: grid;
+  place-items: center;
+}
+
+.each-day-weather-paragraph {
+  padding: var(--space-md) 0;
+}

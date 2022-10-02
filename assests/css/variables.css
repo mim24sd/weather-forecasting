@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
 
 :root {
   /* colors */
-  --darkColor: black;
+
   --lightColor: white;
-  --noColor: rgba(245, 246, 252, 0);
-  --errorColor: red;
+
+  --darkColorHover: rgb(17 31 44 / 70%);
 
   /* sizes */
   --size-unit: 1em;
@@ -14,6 +13,7 @@
   --size-lg: calc(1.5 * var(--size-unit));
   --size-xl: calc(2 * var(--size-unit));
   --size-xxl: calc(2.5 * var(--size-unit));
+  --size-xxxl: calc(3 * var(--size-unit));
 
   /* spacing sizes */
   --space-unit: 8px;
