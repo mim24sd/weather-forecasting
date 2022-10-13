@@ -53,8 +53,8 @@ body {
 }
 
 .main-image {
-  width: 104px;
-  height: 100px;
+  width: 100px;
+  height: auto;
 }
 
 .main-degree {
