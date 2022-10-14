@@ -54,6 +54,7 @@ body {
 
 .main-image {
   width: 100px;
+  height: auto;
 }
 
 .main-degree {
