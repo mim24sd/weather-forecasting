@@ -84,28 +84,28 @@ body {
   align-self: center;
 }
 
-.forcasting-weather-list {
+.forecasting-weather-list {
   display: flex;
   width: 100%;
   justify-content: space-around;
 }
 
-.forcasting-weather-box {
+.forecasting-weather-box {
   display: grid;
   place-items: center;
 }
 
-.forcasting-weather-text-box {
+.forecasting-weather-text-box {
   display: grid;
   place-items: center;
 }
 
-.forcasting-weather-icon {
+.forecasting-weather-icon {
   width: 50px;
   height: auto;
 }
 
-.forcasting-weather-paragraph {
+.forecasting-weather-paragraph {
   padding: var(--space-md) 0;
 }
 
