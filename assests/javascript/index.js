@@ -13,44 +13,36 @@ async function getWeather() {
   await getForecastingWeather(city);
 
   showWeather();
-}
-async function getCity() {
-  try {
-    const fetchedData = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=Rasht,IR&appid=${apiKey}`
-    );
-    const cityList = await fetchedData.json();
 
-    city = cityList[0];
-  } catch {
+  if (city || curentWeather || dailyForecastingWeatherList === {}) {
     showErrorMassage();
   }
+}
+async function getCity() {
+  const fetchedData = await fetch(
+    `https://api.openweathermap.org/geo/1.0/direct?q=Rasht,IR&appid=${apiKey}`
+  );
+  const cityList = await fetchedData.json();
+
+  city = cityList[0];
 }
 
 async function getCurrentWeather(thisCity) {
-  try {
-    const fetchedData = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
-    );
-    curentWeather = await fetchedData.json();
-  } catch {
-    showErrorMassage();
-  }
+  const fetchedData = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
+  );
+  curentWeather = await fetchedData.json();
 }
 
 async function getForecastingWeather(thisCity) {
-  try {
-    const fetchedData = await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
-    );
-    const threeHoursForecastingWeatherFullInfo = await fetchedData.json();
+  const fetchedData = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
+  );
+  const threeHoursForecastingWeatherFullInfo = await fetchedData.json();
 
-    dailyForecastingWeatherList = filterForecastingWeatherByDay(
-      threeHoursForecastingWeatherFullInfo.list
-    );
-  } catch {
-    showErrorMassage();
-  }
+  dailyForecastingWeatherList = filterForecastingWeatherByDay(
+    threeHoursForecastingWeatherFullInfo.list
+  );
 }
 
 function showWeather() {
