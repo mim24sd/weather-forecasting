@@ -3,14 +3,14 @@ const mainSection = document.getElementById("main");
 
 let city = {};
 let curentWeather = {};
-let dailyForcastingWeatherList = {};
+let dailyForecastingWeatherList = {};
 
 getWeather();
 
 async function getWeather() {
   await getCity();
   await getCurrentWeather(city);
-  await getForcastingWeather(city);
+  await getForecastingWeather(city);
 
   showWeather();
 }
@@ -38,15 +38,15 @@ async function getCurrentWeather(thisCity) {
   }
 }
 
-async function getForcastingWeather(thisCity) {
+async function getForecastingWeather(thisCity) {
   try {
     const fetchedData = await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
     );
-    const threeHoursForcastingWeatherFullInfo = await fetchedData.json();
+    const threeHoursForecastingWeatherFullInfo = await fetchedData.json();
 
-    dailyForcastingWeatherList = filterForcastingWeatherByDay(
-      threeHoursForcastingWeatherFullInfo.list
+    dailyForecastingWeatherList = filterForecastingWeatherByDay(
+      threeHoursForecastingWeatherFullInfo.list
     );
   } catch {
     showErrorMassage();
@@ -93,58 +93,58 @@ function showWeather() {
       </li>
     </ul>
   </section>
-  <ul class="forcasting-weather-list">
+  <ul class="forecasting-weather-list">
     <li>
-      <figure class="forcasting-weather-box">
+      <figure class="forecasting-weather-box">
         <img
-          alt="forcasting weather image"
+          alt="forecasting weather image"
           src="http://openweathermap.org/img/wn/${
-            dailyForcastingWeatherList[0].weather[0].icon
+            dailyForecastingWeatherList[0].weather[0].icon
           }@2x.png"
-          class="forcasting-weather-icon"
+          class="forecasting-weather-icon"
         />
-        <figcaption class="forcasting-weather-text-box">
-          <p class="forcasting-weather-paragraph">${convertKelvinToCelsius(
-            dailyForcastingWeatherList[0].main.temp
+        <figcaption class="forecasting-weather-text-box">
+          <p class="forecasting-weather-paragraph">${convertKelvinToCelsius(
+            dailyForecastingWeatherList[0].main.temp
           )}</p>
           <p>Today</p>
         </figcaption>
       </figure>
     </li>
     <li>
-      <figure class="forcasting-weather-box">
+      <figure class="forecasting-weather-box">
         <img
-          alt="forcasting weather image"
+          alt="forecasting weather image"
           src="http://openweathermap.org/img/wn/${
-            dailyForcastingWeatherList[1].weather[0].icon
+            dailyForecastingWeatherList[1].weather[0].icon
           }@2x.png"
-          class="forcasting-weather-icon"
+          class="forecasting-weather-icon"
         />
-        <figcaption class="forcasting-weather-text-box">
-          <p class="forcasting-weather-paragraph">${convertKelvinToCelsius(
-            dailyForcastingWeatherList[1].main.temp
+        <figcaption class="forecasting-weather-text-box">
+          <p class="forecasting-weather-paragraph">${convertKelvinToCelsius(
+            dailyForecastingWeatherList[1].main.temp
           )}</p>
           <p>${
-            convertTimeStampToDate(dailyForcastingWeatherList[1].dt).dayOfWeek
+            convertTimeStampToDate(dailyForecastingWeatherList[1].dt).dayOfWeek
           }</p>
         </figcaption>
       </figure>
     </li>
     <li>
-      <figure class="forcasting-weather-box">
+      <figure class="forecasting-weather-box">
         <img
-          alt="forcasting weather image"
+          alt="forecasting weather image"
           src="http://openweathermap.org/img/wn/${
-            dailyForcastingWeatherList[2].weather[0].icon
+            dailyForecastingWeatherList[2].weather[0].icon
           }@2x.png"
-          class="forcasting-weather-icon"
+          class="forecasting-weather-icon"
         />
-        <figcaption class="forcasting-weather-text-box">
-          <p class="forcasting-weather-paragraph">${convertKelvinToCelsius(
-            dailyForcastingWeatherList[2].main.temp
+        <figcaption class="forecasting-weather-text-box">
+          <p class="forecasting-weather-paragraph">${convertKelvinToCelsius(
+            dailyForecastingWeatherList[2].main.temp
           )}</p>
           <p>${
-            convertTimeStampToDate(dailyForcastingWeatherList[2].dt).dayOfWeek
+            convertTimeStampToDate(dailyForecastingWeatherList[2].dt).dayOfWeek
           }</p>
         </figcaption>
       </figure>
@@ -223,7 +223,7 @@ function convertMeterPerSecondToMilesPerHour(meterPerSecond) {
   return `${(meterPerSecond * 2.237).toFixed(2)}mph`;
 }
 
-function filterForcastingWeatherByDay(list) {
+function filterForecastingWeatherByDay(list) {
   return list.filter((listItem) => {
     return (
       new Date(listItem.dt_txt).getHours() ===
