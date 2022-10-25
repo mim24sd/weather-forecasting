@@ -1,37 +1,34 @@
 const apiKey = "8cf248a4fd398e2908cf52a9f187375b";
 const mainSection = document.getElementById("main");
 
-let city = {};
-let curentWeather = {};
-let dailyForecastingWeatherList = {};
-
 getWeather();
 
 async function getWeather() {
-  await getCity();
-  await getCurrentWeather(city);
-  await getForecastingWeather(city);
+  try {
+    const city = await getCityLocation();
+    const curentWeather = await getCurrentWeather(city);
+    const dailyForecastingWeatherList = await getForecastingWeather(city);
 
-  showWeather();
-
-  if (city || curentWeather || dailyForecastingWeatherList === {}) {
+    showWeather(curentWeather, dailyForecastingWeatherList);
+  } catch {
     showErrorMassage();
   }
 }
-async function getCity() {
+
+async function getCityLocation() {
   const fetchedData = await fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=Rasht,IR&appid=${apiKey}`
   );
   const cityList = await fetchedData.json();
 
-  city = cityList[0];
+  return cityList[0];
 }
 
 async function getCurrentWeather(thisCity) {
   const fetchedData = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
   );
-  curentWeather = await fetchedData.json();
+  return await fetchedData.json();
 }
 
 async function getForecastingWeather(thisCity) {
@@ -40,12 +37,12 @@ async function getForecastingWeather(thisCity) {
   );
   const threeHoursForecastingWeatherFullInfo = await fetchedData.json();
 
-  dailyForecastingWeatherList = filterForecastingWeatherByDay(
+  return filterForecastingWeatherByDay(
     threeHoursForecastingWeatherFullInfo.list
   );
 }
 
-function showWeather() {
+function showWeather(curentWeather, dailyForecastingWeatherList) {
   mainSection.innerHTML += `<section class="city-section">
     <h1 class="city-name">${curentWeather.name}</h1>
     <time datetime="2020-02-14">${
@@ -152,59 +149,11 @@ function convertTimeStampToDate(date) {
   const dateTime = new Date(date * 1000);
 
   return {
-    year: dateTime.getFullYear(),
-    month: convertMonthNumberToName(dateTime.getMonth()),
-    dayOfMonth: dateTime.getDate(),
-    dayOfWeek: convertDayOfWeekNumberToName(dateTime.getDay()),
+    year: dateTime.toLocaleDateString("en-US", { year: "numeric" }),
+    month: dateTime.toLocaleDateString("en-US", { month: "short" }),
+    dayOfMonth: dateTime.toLocaleDateString("en-US", { day: "numeric" }),
+    dayOfWeek: dateTime.toLocaleDateString("en-US", { weekday: "long" }),
   };
-}
-
-function convertMonthNumberToName(monthNumber) {
-  switch (monthNumber) {
-    case 1:
-      return "Jan";
-    case 2:
-      return "Feb";
-    case 3:
-      return "Mar";
-    case 4:
-      return "Apr";
-    case 5:
-      return "May";
-    case 6:
-      return "Jun";
-    case 7:
-      return "Jul";
-    case 8:
-      return "Aug";
-    case 9:
-      return "Sep";
-    case 10:
-      return "Oct";
-    case 11:
-      return "Nov";
-    case 12:
-      return "Dec";
-  }
-}
-
-function convertDayOfWeekNumberToName(dayOfWeekNumber) {
-  switch (dayOfWeekNumber) {
-    case 0:
-      return "Sunday";
-    case 1:
-      return "Monday";
-    case 2:
-      return "Tuesday";
-    case 3:
-      return "Wednesday";
-    case 4:
-      return "Thursday";
-    case 5:
-      return "Friday";
-    case 6:
-      return "Saturday";
-  }
 }
 
 function convertKelvinToCelsius(kelvin) {
