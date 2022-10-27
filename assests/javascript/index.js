@@ -1,4 +1,6 @@
 const apiKey = "8cf248a4fd398e2908cf52a9f187375b";
+const baseUrl = "https://api.openweathermap.org/";
+
 const mainSection = document.getElementById("main");
 
 getWeather();
@@ -6,10 +8,10 @@ getWeather();
 async function getWeather() {
   try {
     const city = await getCityLocation();
-    const curentWeather = await getCurrentWeather(city);
+    const currentWeather = await getCurrentWeather(city);
     const dailyForecastingWeatherList = await getForecastingWeather(city);
 
-    showWeather(curentWeather, dailyForecastingWeatherList);
+    showWeather(currentWeather, dailyForecastingWeatherList);
   } catch {
     showErrorMassage();
   }
@@ -17,7 +19,7 @@ async function getWeather() {
 
 async function getCityLocation() {
   const fetchedData = await fetch(
-    `https://api.openweathermap.org/geo/1.0/direct?q=Rasht,IR&appid=${apiKey}`
+    `${baseUrl}geo/1.0/direct?q=Rasht,IR&appid=${apiKey}`
   );
   const cityList = await fetchedData.json();
 
@@ -26,14 +28,14 @@ async function getCityLocation() {
 
 async function getCurrentWeather(thisCity) {
   const fetchedData = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
+    `${baseUrl}data/2.5/weather?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
   );
   return await fetchedData.json();
 }
 
 async function getForecastingWeather(thisCity) {
   const fetchedData = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
+    `${baseUrl}data/2.5/forecast?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
   );
   const threeHoursForecastingWeatherFullInfo = await fetchedData.json();
 
@@ -42,107 +44,17 @@ async function getForecastingWeather(thisCity) {
   );
 }
 
-function showWeather(curentWeather, dailyForecastingWeatherList) {
-  mainSection.innerHTML += `<section class="city-section">
-    <h1 class="city-name">${curentWeather.name}</h1>
-    <time datetime="2020-02-14">${
-      convertTimeStampToDate(curentWeather.dt).dayOfWeek
-    }, ${convertTimeStampToDate(curentWeather.dt).dayOfMonth} ${
-    convertTimeStampToDate(curentWeather.dt).month
-  } ${convertTimeStampToDate(curentWeather.dt).year}</time>
-  </section>
-  <section class="main-section">
-    <img
-      alt="today's weather image"
-      src="http://openweathermap.org/img/wn/${
-        curentWeather.weather[0].icon
-      }@2x.png"
-      class="main-image"
-    />
-    <h2 class="main-degree">${convertKelvinToCelsius(
-      curentWeather.main.temp
-    )}</h2>
-    <p>${curentWeather.weather[0].description}</p>
-    <ul class="main-icons-container">
-      <li>
-        <figure class="main-icon-container">
-          <i class="fa fa-solid fa-wind main-icon"></i>
-          <figcaption class="main-icon-detail">${convertMeterPerSecondToMilesPerHour(
-            curentWeather.wind.speed
-          )}</figcaption>
-        </figure>
-      </li>
-      <li>
-        <figure class="main-icon-container">
-          <i class="fa fa-solid fa-droplet main-icon"></i>
-          <figcaption class="main-icon-detail">${
-            curentWeather.main.humidity
-          }%</figcaption>
-        </figure>
-      </li>
-    </ul>
-  </section>
-  <ul class="forecasting-weather-list">
-    <li>
-      <figure class="forecasting-weather-box">
-        <img
-          alt="forecasting weather image"
-          src="http://openweathermap.org/img/wn/${
-            dailyForecastingWeatherList[0].weather[0].icon
-          }@2x.png"
-          class="forecasting-weather-icon"
-        />
-        <figcaption class="forecasting-weather-text-box">
-          <p class="forecasting-weather-paragraph">${convertKelvinToCelsius(
-            dailyForecastingWeatherList[0].main.temp
-          )}</p>
-          <p>Today</p>
-        </figcaption>
-      </figure>
-    </li>
-    <li>
-      <figure class="forecasting-weather-box">
-        <img
-          alt="forecasting weather image"
-          src="http://openweathermap.org/img/wn/${
-            dailyForecastingWeatherList[1].weather[0].icon
-          }@2x.png"
-          class="forecasting-weather-icon"
-        />
-        <figcaption class="forecasting-weather-text-box">
-          <p class="forecasting-weather-paragraph">${convertKelvinToCelsius(
-            dailyForecastingWeatherList[1].main.temp
-          )}</p>
-          <p>${
-            convertTimeStampToDate(dailyForecastingWeatherList[1].dt).dayOfWeek
-          }</p>
-        </figcaption>
-      </figure>
-    </li>
-    <li>
-      <figure class="forecasting-weather-box">
-        <img
-          alt="forecasting weather image"
-          src="http://openweathermap.org/img/wn/${
-            dailyForecastingWeatherList[2].weather[0].icon
-          }@2x.png"
-          class="forecasting-weather-icon"
-        />
-        <figcaption class="forecasting-weather-text-box">
-          <p class="forecasting-weather-paragraph">${convertKelvinToCelsius(
-            dailyForecastingWeatherList[2].main.temp
-          )}</p>
-          <p>${
-            convertTimeStampToDate(dailyForecastingWeatherList[2].dt).dayOfWeek
-          }</p>
-        </figcaption>
-      </figure>
-    </li>
-  </ul>`;
+function showWeather(currentWeather, dailyForecastingWeatherList) {
+  const dailyForcastingWeatherList = showDailyForecastingWeatherList(dailyForecastingWeatherList);
+  const currentForcastingWeather = showCurrentWeather(currentWeather);
+
+  mainSection.innerHTML = `
+    ${currentForcastingWeather}
+    <ul class="forecasting-weather-list">${dailyForcastingWeatherList}</ul>`;
 }
 
 function showErrorMassage() {
-  mainSection.innerHTML += `<p class="error-message">Somthing went wrong. Please refresh the page!</p>`;
+  mainSection.innerHTML = `<p class="error-message">Somthing went wrong. Please refresh the page!</p>`;
 }
 
 function convertTimeStampToDate(date) {
@@ -171,4 +83,102 @@ function filterForecastingWeatherByDay(list) {
       new Date(list[0].dt_txt).getHours()
     );
   });
+}
+
+function handleCurrentWeatherDatas(currentWeather) {
+  const date = convertTimeStampToDate(currentWeather.dt);
+
+  return {
+    cityName: currentWeather.name,
+
+    currentIcon: currentWeather.weather[0].icon,
+    currentDescription: currentWeather.weather[0].description,
+    currentTemperature: convertKelvinToCelsius(currentWeather.main.temp),
+    currentWindSpeed: convertMeterPerSecondToMilesPerHour(currentWeather.wind.speed),
+    currentHumidity: currentWeather.main.humidity,
+
+    dayOfWeek: date.dayOfWeek,
+    dayOfMonth: date.dayOfMonth,
+    month: date.month,
+    year: date.year,
+  };
+}
+
+function showCurrentWeather(currentWeather) {
+  const currentWeatherDatas = handleCurrentWeatherDatas(currentWeather);
+
+  return `
+  <section class="city-section">
+    <h1 class="city-name">${currentWeatherDatas.cityName}</h1>
+    <time datetime="2020-02-14">${currentWeatherDatas.dayOfWeek}, ${currentWeatherDatas.dayOfMonth} ${currentWeatherDatas.month} ${currentWeatherDatas.year}</time>
+  </section>
+  <section class="main-section">
+    <img
+      alt="today's weather image"
+      src="http://openweathermap.org/img/wn/${currentWeatherDatas.currentIcon}@2x.png"
+      class="main-image"
+    />
+    <h2 class="main-degree">${currentWeatherDatas.currentTemperature}</h2>
+    <p>${currentWeatherDatas.currentDescription}</p>
+    <ul class="main-icons-container">
+      <li>
+        <figure class="main-icon-container">
+          <i class="fa fa-solid fa-wind main-icon"></i>
+          <figcaption class="main-icon-detail">${currentWeatherDatas.currentWindSpeed}</figcaption>
+        </figure>
+      </li>
+      <li>
+        <figure class="main-icon-container">
+          <i class="fa fa-solid fa-droplet main-icon"></i>
+          <figcaption class="main-icon-detail">${currentWeatherDatas.currentHumidity}%</figcaption>
+        </figure>
+      </li>
+    </ul>
+  </section>`;
+}
+
+function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
+  let dailyForcastingList = [];
+  let dayOfWeek = "";
+
+  for (let day = 0; day <= 2; day++) {
+    day === 0
+      ? (dayOfWeek = "Today")
+      : (dayOfWeek = convertTimeStampToDate(dailyForecastingWeatherList[day].dt).dayOfWeek);
+
+    dailyForcastingList.push({
+      icon: dailyForecastingWeatherList[day].weather[0].icon,
+      temperature: convertKelvinToCelsius(dailyForecastingWeatherList[day].main.temp),
+      dayOfWeek: dayOfWeek,
+    });
+  }
+
+  return dailyForcastingList;
+}
+
+function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
+  const dailyForcastingList = handleDailyForecastingWeatherDatas(dailyForecastingWeatherList);
+  let dailyForecastingSection = "";
+
+  dailyForcastingList.forEach((dailyForcastingItem) => {
+    dailyForecastingSection += `<li>
+      <figure class="forecasting-weather-box">
+        <img
+          alt="forecasting weather image"
+          src="http://openweathermap.org/img/wn/${dailyForcastingItem.icon}@2x.png"
+          class="forecasting-weather-icon"
+        />
+        <figcaption class="forecasting-weather-text-box">
+          <p class="forecasting-weather-paragraph">
+            ${dailyForcastingItem.temperature}
+          </p>
+          <p>
+            ${dailyForcastingItem.dayOfWeek}
+          </p>
+        </figcaption>
+      </figure>
+    </li>`;
+  });
+
+  return dailyForecastingSection;
 }
