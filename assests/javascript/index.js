@@ -142,14 +142,12 @@ function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
   let dayOfWeek = "";
 
   for (let day = 0; day <= 2; day++) {
-    day === 0
-      ? (dayOfWeek = "Today")
-      : (dayOfWeek = convertTimeStampToDate(dailyForecastingWeatherList[day].dt).dayOfWeek);
+    dayOfWeek = day === 0 ? "Today" :  convertTimeStampToDate(dailyForecastingWeatherList[day].dt).dayOfWeek;
 
     dailyForcastingList.push({
       icon: dailyForecastingWeatherList[day].weather[0].icon,
       temperature: convertKelvinToCelsius(dailyForecastingWeatherList[day].main.temp),
-      dayOfWeek: dayOfWeek,
+      dayOfWeek,
     });
   }
 
@@ -158,10 +156,9 @@ function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
 
 function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
   const dailyForcastingList = handleDailyForecastingWeatherDatas(dailyForecastingWeatherList);
-  let dailyForecastingSection = "";
-
-  dailyForcastingList.forEach((dailyForcastingItem) => {
-    dailyForecastingSection += `<li>
+  
+  return dailyForcastingList.map((dailyForcastingItem) => {
+    return `<li>
       <figure class="forecasting-weather-box">
         <img
           alt="forecasting weather image"
@@ -178,7 +175,5 @@ function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
         </figcaption>
       </figure>
     </li>`;
-  });
-
-  return dailyForecastingSection;
+  }).join('');
 }
