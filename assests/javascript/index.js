@@ -156,7 +156,7 @@ function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
 
 function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
   const dailyForcastingList = handleDailyForecastingWeatherDatas(dailyForecastingWeatherList);
-  
+
   return dailyForcastingList.map((dailyForcastingItem) => {
     return `<li>
       <figure class="forecasting-weather-box">
