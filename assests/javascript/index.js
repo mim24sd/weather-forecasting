@@ -2,12 +2,17 @@ const apiKey = "8cf248a4fd398e2908cf52a9f187375b";
 const baseUrl = "https://api.openweathermap.org/";
 
 const mainSection = document.getElementById("main");
+const cityNameSelection = document.getElementById("cities");
 
-getWeather();
+cityNameSelection.addEventListener("click", () => {
+  getWeather(cityNameSelection.value);
+});
 
-async function getWeather() {
+getWeather(cityNameSelection.value);
+
+async function getWeather(cityName) {
   try {
-    const city = await getCityLocation();
+    const city = await getCityLocation(cityName);
     const currentWeather = await getCurrentWeather(city);
     const dailyForecastingWeatherList = await getForecastingWeather(city);
 
@@ -17,9 +22,9 @@ async function getWeather() {
   }
 }
 
-async function getCityLocation() {
+async function getCityLocation(cityName) {
   const fetchedData = await fetch(
-    `${baseUrl}geo/1.0/direct?q=Rasht,IR&appid=${apiKey}`
+    `${baseUrl}geo/1.0/direct?q=${cityName}&appid=${apiKey}`
   );
   const cityList = await fetchedData.json();
 
