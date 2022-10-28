@@ -64,7 +64,7 @@ body {
 
 .main-icons-container {
   display: flex;
-  width: 100%;
+  width: 120%;
   justify-content: space-between;
   padding-top: var(--space-lg);
 }
@@ -74,6 +74,8 @@ body {
 }
 
 .main-icon {
+  width: 100%;
+  height: auto;
   padding-right: var(--space-md);
 }
 
@@ -82,22 +84,31 @@ body {
   align-self: center;
 }
 
-.each-day-weather-list {
+.forecasting-weather-list {
   display: flex;
   width: 100%;
   justify-content: space-around;
 }
 
-.each-day-weather-box {
+.forecasting-weather-box {
   display: grid;
   place-items: center;
 }
 
-.each-day-weather-text-box {
+.forecasting-weather-text-box {
   display: grid;
   place-items: center;
 }
 
-.each-day-weather-paragraph {
+.forecasting-weather-icon {
+  width: 50px;
+  height: auto;
+}
+
+.forecasting-weather-paragraph {
   padding: var(--space-md) 0;
+}
+
+.error-message {
+  font-size: var(--size-lg);
 }
