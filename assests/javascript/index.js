@@ -1,18 +1,33 @@
+import cityListJson from "./cityList.json" assert { type: "json" };
+
 const apiKey = "8cf248a4fd398e2908cf52a9f187375b";
 const baseUrl = "https://api.openweathermap.org/";
 
 const mainSection = document.getElementById("main");
-const cityNameSelection = document.getElementById("cities");
+const selectedCity = document.getElementById("selected-city");
+const cityNameList = document.getElementById("cities");
 
-cityNameSelection.addEventListener("click", () => {
-  getWeather(cityNameSelection.value);
+selectedCity.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    getWeather(selectedCity.value);
+  }
 });
 
-getWeather(cityNameSelection.value);
+showDataList();
+getWeather("Rasht");
+
+function showDataList() {
+  return (cityNameList.innerHTML = cityListJson
+    .map((city) => {
+      return `<option>${city.name}</option>`;
+    })
+    .join(""));
+}
 
 async function getWeather(cityName) {
   try {
-    const city = await getCityLocation(cityName);
+    console.log(cityName);
+    const city = getCityId(cityName);
     const currentWeather = await getCurrentWeather(city);
     const dailyForecastingWeatherList = await getForecastingWeather(city);
 
@@ -22,25 +37,28 @@ async function getWeather(cityName) {
   }
 }
 
-async function getCityLocation(cityName) {
-  const fetchedData = await fetch(
-    `${baseUrl}geo/1.0/direct?q=${cityName}&appid=${apiKey}`
-  );
-  const cityList = await fetchedData.json();
+function getCityId(name) {
+  let id = 0;
 
-  return cityList[0];
+  cityListJson.filter((city) => {
+    if (city.name === name) {
+      id = city.id;
+    }
+  });
+
+  return id;
 }
 
-async function getCurrentWeather(thisCity) {
+async function getCurrentWeather(id) {
   const fetchedData = await fetch(
-    `${baseUrl}data/2.5/weather?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
+    `${baseUrl}data/2.5/weather?id=${id}&appid=${apiKey}`
   );
   return await fetchedData.json();
 }
 
-async function getForecastingWeather(thisCity) {
+async function getForecastingWeather(id) {
   const fetchedData = await fetch(
-    `${baseUrl}data/2.5/forecast?lat=${thisCity.lat}&lon=${thisCity.lon}&appid=${apiKey}`
+    `${baseUrl}data/2.5/forecast?id=${id}&appid=${apiKey}`
   );
   const threeHoursForecastingWeatherFullInfo = await fetchedData.json();
 
@@ -50,7 +68,9 @@ async function getForecastingWeather(thisCity) {
 }
 
 function showWeather(currentWeather, dailyForecastingWeatherList) {
-  const dailyForcastingWeatherList = showDailyForecastingWeatherList(dailyForecastingWeatherList);
+  const dailyForcastingWeatherList = showDailyForecastingWeatherList(
+    dailyForecastingWeatherList
+  );
   const currentForcastingWeather = showCurrentWeather(currentWeather);
 
   mainSection.innerHTML = `
@@ -99,7 +119,9 @@ function handleCurrentWeatherDatas(currentWeather) {
     currentIcon: currentWeather.weather[0].icon,
     currentDescription: currentWeather.weather[0].description,
     currentTemperature: convertKelvinToCelsius(currentWeather.main.temp),
-    currentWindSpeed: convertMeterPerSecondToMilesPerHour(currentWeather.wind.speed),
+    currentWindSpeed: convertMeterPerSecondToMilesPerHour(
+      currentWeather.wind.speed
+    ),
     currentHumidity: currentWeather.main.humidity,
 
     dayOfWeek: date.dayOfWeek,
@@ -147,11 +169,16 @@ function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
   let dayOfWeek = "";
 
   for (let day = 0; day <= 2; day++) {
-    dayOfWeek = day === 0 ? "Today" :  convertTimeStampToDate(dailyForecastingWeatherList[day].dt).dayOfWeek;
+    dayOfWeek =
+      day === 0
+        ? "Today"
+        : convertTimeStampToDate(dailyForecastingWeatherList[day].dt).dayOfWeek;
 
     dailyForcastingList.push({
       icon: dailyForecastingWeatherList[day].weather[0].icon,
-      temperature: convertKelvinToCelsius(dailyForecastingWeatherList[day].main.temp),
+      temperature: convertKelvinToCelsius(
+        dailyForecastingWeatherList[day].main.temp
+      ),
       dayOfWeek,
     });
   }
@@ -160,10 +187,13 @@ function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
 }
 
 function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
-  const dailyForcastingList = handleDailyForecastingWeatherDatas(dailyForecastingWeatherList);
+  const dailyForcastingList = handleDailyForecastingWeatherDatas(
+    dailyForecastingWeatherList
+  );
 
-  return dailyForcastingList.map((dailyForcastingItem) => {
-    return `<li>
+  return dailyForcastingList
+    .map((dailyForcastingItem) => {
+      return `<li>
       <figure class="forecasting-weather-box">
         <img
           alt="forecasting weather image"
@@ -180,5 +210,6 @@ function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
         </figcaption>
       </figure>
     </li>`;
-  }).join('');
+    })
+    .join("");
 }
