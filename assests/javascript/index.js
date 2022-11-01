@@ -1,4 +1,4 @@
-import cityListJson from "./cityList.json" assert { type: "json" };
+import cityListJson from "../json/cityList.json" assert { type: "json" };
 
 const apiKey = "8cf248a4fd398e2908cf52a9f187375b";
 const baseUrl = "https://api.openweathermap.org/";
@@ -9,12 +9,12 @@ const cityNameList = document.getElementById("cities");
 
 selectedCity.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    getWeather(selectedCity.value);
+    getWeather(getCityId(selectedCity.value));
   }
 });
 
 showDataList();
-getWeather("Rasht");
+getWeather(118743);
 
 function showDataList() {
   return (cityNameList.innerHTML = cityListJson.map((city) => {
@@ -23,9 +23,8 @@ function showDataList() {
     .join(""));
 }
 
-async function getWeather(cityName) {
+async function getWeather(cityId) {
   try {
-    const cityId = getCityId(cityName);
     const currentWeather = await getCurrentWeather(cityId);
     const dailyForecastingWeatherList = await getForecastingWeather(cityId);
 
