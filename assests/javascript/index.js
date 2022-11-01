@@ -17,8 +17,7 @@ showDataList();
 getWeather("Rasht");
 
 function showDataList() {
-  return (cityNameList.innerHTML = cityListJson
-    .map((city) => {
+  return (cityNameList.innerHTML = cityListJson.map((city) => {
       return `<option>${city.name}</option>`;
     })
     .join(""));
@@ -26,10 +25,9 @@ function showDataList() {
 
 async function getWeather(cityName) {
   try {
-    console.log(cityName);
-    const city = getCityId(cityName);
-    const currentWeather = await getCurrentWeather(city);
-    const dailyForecastingWeatherList = await getForecastingWeather(city);
+    const cityId = getCityId(cityName);
+    const currentWeather = await getCurrentWeather(cityId);
+    const dailyForecastingWeatherList = await getForecastingWeather(cityId);
 
     showWeather(currentWeather, dailyForecastingWeatherList);
   } catch {
@@ -37,28 +35,28 @@ async function getWeather(cityName) {
   }
 }
 
-function getCityId(name) {
-  let id = 0;
+function getCityId(cityName) {
+  let cityId = 0;
 
   cityListJson.filter((city) => {
-    if (city.name === name) {
-      id = city.id;
+    if (city.name === cityName) {
+      cityId = city.id;
     }
   });
 
-  return id;
+  return cityId;
 }
 
-async function getCurrentWeather(id) {
+async function getCurrentWeather(cityId) {
   const fetchedData = await fetch(
-    `${baseUrl}data/2.5/weather?id=${id}&appid=${apiKey}`
+    `${baseUrl}data/2.5/weather?id=${cityId}&appid=${apiKey}`
   );
   return await fetchedData.json();
 }
 
-async function getForecastingWeather(id) {
+async function getForecastingWeather(cityId) {
   const fetchedData = await fetch(
-    `${baseUrl}data/2.5/forecast?id=${id}&appid=${apiKey}`
+    `${baseUrl}data/2.5/forecast?id=${cityId}&appid=${apiKey}`
   );
   const threeHoursForecastingWeatherFullInfo = await fetchedData.json();
 
@@ -68,9 +66,7 @@ async function getForecastingWeather(id) {
 }
 
 function showWeather(currentWeather, dailyForecastingWeatherList) {
-  const dailyForcastingWeatherList = showDailyForecastingWeatherList(
-    dailyForecastingWeatherList
-  );
+  const dailyForcastingWeatherList = showDailyForecastingWeatherList(dailyForecastingWeatherList);
   const currentForcastingWeather = showCurrentWeather(currentWeather);
 
   mainSection.innerHTML = `
@@ -119,9 +115,7 @@ function handleCurrentWeatherDatas(currentWeather) {
     currentIcon: currentWeather.weather[0].icon,
     currentDescription: currentWeather.weather[0].description,
     currentTemperature: convertKelvinToCelsius(currentWeather.main.temp),
-    currentWindSpeed: convertMeterPerSecondToMilesPerHour(
-      currentWeather.wind.speed
-    ),
+    currentWindSpeed: convertMeterPerSecondToMilesPerHour(currentWeather.wind.speed),
     currentHumidity: currentWeather.main.humidity,
 
     dayOfWeek: date.dayOfWeek,
@@ -169,16 +163,11 @@ function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
   let dayOfWeek = "";
 
   for (let day = 0; day <= 2; day++) {
-    dayOfWeek =
-      day === 0
-        ? "Today"
-        : convertTimeStampToDate(dailyForecastingWeatherList[day].dt).dayOfWeek;
+    dayOfWeek = day === 0 ? "Today" : convertTimeStampToDate(dailyForecastingWeatherList[day].dt).dayOfWeek;
 
     dailyForcastingList.push({
       icon: dailyForecastingWeatherList[day].weather[0].icon,
-      temperature: convertKelvinToCelsius(
-        dailyForecastingWeatherList[day].main.temp
-      ),
+      temperature: convertKelvinToCelsius(dailyForecastingWeatherList[day].main.temp),
       dayOfWeek,
     });
   }
@@ -187,12 +176,9 @@ function handleDailyForecastingWeatherDatas(dailyForecastingWeatherList) {
 }
 
 function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
-  const dailyForcastingList = handleDailyForecastingWeatherDatas(
-    dailyForecastingWeatherList
-  );
+  const dailyForcastingList = handleDailyForecastingWeatherDatas(dailyForecastingWeatherList);
 
-  return dailyForcastingList
-    .map((dailyForcastingItem) => {
+  return dailyForcastingList.map((dailyForcastingItem) => {
       return `<li>
       <figure class="forecasting-weather-box">
         <img
@@ -210,6 +196,5 @@ function showDailyForecastingWeatherList(dailyForecastingWeatherList) {
         </figcaption>
       </figure>
     </li>`;
-    })
-    .join("");
+    }).join("");
 }
