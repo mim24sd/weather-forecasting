@@ -17,10 +17,10 @@ showDataList();
 getWeather(118743);
 
 function showDataList() {
-  return (cityNameList.innerHTML = cityListJson.map((city) => {
-      return `<option>${city.name}</option>`;
+  cityNameList.innerHTML = cityListJson.map((city) => {
+      return `<option data-value=${city.id}>${city.name}</option>`;
     })
-    .join(""));
+    .join("");
 }
 
 async function getWeather(cityId) {
@@ -35,15 +35,9 @@ async function getWeather(cityId) {
 }
 
 function getCityId(cityName) {
-  let cityId = 0;
-
-  cityListJson.filter((city) => {
-    if (city.name === cityName) {
-      cityId = city.id;
-    }
-  });
-
-  return cityId;
+  const foundCity = cityListJson.find((city) => city.name === cityName);
+  
+  return foundCity ? foundCity.id : 0;
 }
 
 async function getCurrentWeather(cityId) {
